@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Admin panel</title>
+
+</head>
+<body>
+
+<!-- Первая секция -->
+<div class="container-fluid">
+    <div class="row bg-dark text-light p-3">
+        <div class="col-11">
+            <span id="UserAuth"/>
+        </div>
+        <div class="col-1" style="text-align: right">
+            <a th:href="@{login}" class="text-secondary">Logout</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Вторая секция -->
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-2
+                    margin-menu-left">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home"
+                   role="tab" aria-controls="v-pills-home" aria-selected="true">Admin</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile"
+                   role="tab" aria-controls="v-pills-profile" aria-selected="false" onclick="loadUser()">User</a>
+            </div>
+        </div>
+
+        <div class="col-10 margin-menu-right">
+            <div class="tab-content pr-right" id="v-pills-tabContent">
+
+                <!-- Таблица Admin -->
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                     aria-labelledby="v-pills-home-tab">
+
+                    <h1 style="margin-left:1%; margin-bottom:2%; margin-top:1%; margin-right:0%">Admin panel</h1>
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#home" type="button" role="tab" aria-controls="home"
+                                    aria-selected="true">Users table
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                                    type="button" role="tab" aria-controls="profile" aria-selected="false" onclick="loadRoles('selectedRoles')">New User
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div style="margin-left:0px; margin-right: 0px; background: #F4F4F4; padding-bottom:0px;">
+                                <h6 class="p-3">All Users</h6>
+                            </div>
+
+                            <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; background-color: white">
+                                <!-- Таблица -->
+                                <table class="table table-hover caption-top table-striped table-borderless bg-white">
+                                    <caption>
+                                        <hr>
+                                    </caption>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Age</th>
+                                        <th>Email</th>
+                                        <th>Roles</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id ="tableUsers"></tbody>
+                                </table>
+                                <!--end Tаблица -->
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade
+                                    bg-white" id="profile" role="tabpanel" aria-labelledby="profile-tab" >
+
+                            <div style="margin:0; background: #F4F4F4;">
+                                <h6 class="p-3">Add new User</h6>
+                            </div>
+
+                            <!-- форма new User-->
+                            <form id="AddUserForm">
+                                <!-- обертка внутри формы для форматирования-->
+                                <div class="container bg-white" style="width:30%; height:30%;">
+
+                                    <div class="loc-form-element">
+                                        <label for="firstname"><span class="fw-bold loc-form-element">First Name</span></label>
+                                        <input type="text" class="form-control" id="firstname" name="firstname"
+                                               placeholder="First name"/>
+                                    </div>
+
+                                    <div class="loc-form-element">
+                                        <label for="lastname"><span class="fw-bold">Last Name</span></label>
+                                        <input type="text" class="form-control" id="lastname" name="lastname"
+                                               placeholder="Last name"/>
+                                    </div>
+
+                                    <div class="loc-form-element">
+                                        <label for="age"><span class="fw-bold">Age</span></label>
+                                        <input type="number" class="form-control" id="age" name="age"
+                                               placeholder="Age"/>
+                                    </div>
+
+                                    <div class="loc-form-element">
+                                        <label for="email"><span class="fw-bold">Email</span></label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               placeholder="E-mail"/>
+                                    </div>
+
+                                    <div class="loc-form-element">
+                                        <label for="password"><span class="fw-bold">Password</span></label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               placeholder="Password"/>
+                                    </div>
+
+                                    <div class="form-group loc-form-element">
+                                        <label for="selectedRoles"><span class="fw-bold">Role</span></label>
+                                        <select multiple="multiple" class="form-control" id="selectedRoles" name="selectedRoles"
+                                                size="2">
+                                        </select>
+                                    </div>
+
+                                    <div class="loc-form-element">
+                                        <input type="submit" value="Add new user" class="btn btn-success" id="add"/>
+                                    </div>
+                                </div>
+                                <!-- end обертка внутри формы для форматирования-->
+                            </form>
+                            <!-- end форма new User-->
+                        </div>
+                    </div>
+                </div>
+                <!-- end Tab Admin -->
+
+                <!-- Tab User -->
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+                    <h1 style="margin-left:1%; margin-bottom:2%; margin-top:1%; margin-right:0%">User
+                        information-page</h1>
+
+                    <div style="margin-left:0px; margin-right: 0px; background: #F4F4F4; padding-bottom:0px;">
+                        <h6 class="p-3">About user</h6>
+                    </div>
+
+                    <div style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px; background-color: white">
+                        <!-- Таблица -->
+                        <table class="table table-hover caption-top table-striped table-borderless bg-white">
+                            <caption>
+                                <hr>
+                            </caption>
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Roles</th>
+                            </tr>
+                            </thead>
+                            <tbody id ="tableUser"></tbody>
+                        </table>
+                        <!--end Tаблица -->
+                    </div>
+                </div>
+                <!-- end Tab User -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- модальное окно Update User -->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" id="updateModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLongTitle">Edit
+                    user</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" id="clodeUpdateModalButton"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- форма Edit User-->
+                <form id="UpdateUserForm">
+
+                    <!-- обертка внутри формы для форматирования-->
+                    <div class="container bg-white"
+                         style="width:70%; height:70%;">
+
+                        <div class="loc-form-element">
+                            <label for="updateUserId"><span
+                                    class="fw-bold loc-form-element">ID</span></label>
+                            <input type="text" class="form-control" id="updateUserId"
+                                   name="updateUserId" readonly/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="firstname"><span
+                                    class="fw-bold loc-form-element">First Name</span></label>
+                            <input type="text" class="form-control"
+                                   id="updateUserFirstname" name="updateUserFirstname"/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="lastname"><span class="fw-bold">Last Name</span></label>
+                            <input type="text" class="form-control"
+                                   id="updateUserLastname" name="updateUserLastname"/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="age"><span
+                                    class="fw-bold">Age</span></label>
+                            <input type="number" class="form-control"
+                                   id="updateUserAge" name="updateUserAge"/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="email"><span
+                                    class="fw-bold">Email</span></label>
+                            <input type="email" class="form-control"
+                                   id="updateUserEmail" name="updateUserEmail"/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="password"><span class="fw-bold">Password</span></label>
+                            <input type="password" class="form-control"
+                                   id="updateUserPassword" name="updateUserPassword"/>
+                        </div>
+
+                        <div class="form-group loc-form-element">
+                            <label for="selectedUpdateUserRoles"><span
+                                    class="fw-bold">Role</span></label>
+                            <select multiple class="form-control"
+                                    id="selectedUpdateUserRoles" name="selectedUpdateUserRoles"
+                                    size="2">
+                            </select>
+                        </div>
+
+                    </div>
+                    <!-- end обертка внутри формы для форматирования-->
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Edit
+                        </button>
+                    </div>
+                </form>
+                <!-- end форма Edit User-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- модальное окно Delete User -->
+<div class="modal fade"  id="deleteModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLongTitle">Delete
+                    user</h5>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close" id="closeDeleteModal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <!-- форма Delete User-->
+                <form id="DeleteUserForm">
+
+                    <!-- обертка внутри формы для форматирования-->
+                    <div class="container bg-white"
+                         style="width:70%; height:70%;">
+
+                        <div class="loc-form-element">
+                            <label for="deleteUserId"><span
+                                    class="fw-bold loc-form-element">ID</span></label>
+                            <input type="text" class="form-control" id="deleteUserId"
+                                   name="deleteUserId" readonly/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="deleteUserFirstname"><span
+                                    class="fw-bold loc-form-element">First Name</span></label>
+                            <input type="text" class="form-control"
+                                   id="deleteUserFirstname" name="deleteUserFirstname" readonly/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="deleteUserLastname"><span class="fw-bold">Last Name</span></label>
+                            <input type="text" class="form-control"
+                                   id="deleteUserLastname" name="deleteUserLastname" readonly/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="deleteUserAge"><span
+                                    class="fw-bold">Age</span></label>
+                            <input type="number" class="form-control"
+                                   id="deleteUserAge" name="deleteUserAge" readonly />
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="deleteUserEmail"><span
+                                    class="fw-bold">Email</span></label>
+                            <input type="email" class="form-control"
+                                   id="deleteUserEmail" name="deleteUserEmail" readonly/>
+                        </div>
+
+                        <div class="loc-form-element">
+                            <label for="deleteUserPassword"><span class="fw-bold">Password</span></label>
+                            <input type="password" class="form-control"
+                                   id="deleteUserPassword" name="deleteUserPassword" readonly/>
+                        </div>
+
+                        <div class="form-group loc-form-element">
+                            <label for="selectedDeleteUserRoles"><span
+                                    class="fw-bold">Role</span></label>
+                            <select multiple class="form-control"
+                                    id="selectedDeleteUserRoles" name="selectedDeleteUserRoles"
+                                    size="2" readonly="">
+                            </select>
+                        </div>
+
+                    </div>
+                    <!-- end обертка внутри формы для форматирования-->
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close
+                        </button>
+                        <button type="submit" class="btn btn-danger">Delete
+                        </button>
+                    </div>
+
+                </form>
+                <!-- end форма Edit User-->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Вариант 1: Bootstrap в связке с Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="/admin-page-script.js"></script>
+
+<!-- Вариант 2: Bootstrap JS отдельно от Popper
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+-->
+</body>
+
+</html>
